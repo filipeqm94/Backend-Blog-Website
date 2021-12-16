@@ -7,6 +7,6 @@ Comment.deleteMany({})
   })
   .then(console.log)
   .catch(console.error)
-  .finally(() => {
-    process.exit()
-  })
+// .finally(() => {
+//   process.exit()
+// })
