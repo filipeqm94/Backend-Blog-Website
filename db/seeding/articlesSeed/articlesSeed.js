@@ -1,5 +1,5 @@
-const Article = require('../models/article')
-const seedData = require('./articlesSeed.json')
+const Article = require('../../../models/article')
+const seedData = require('../articlesSeed.json')
 
 Article.deleteMany({})
   .then(() => Article.create(seedData))
