@@ -10,8 +10,8 @@ app.use(express.urlencoded({ extended: true }))
 //config - end
 
 //controllers - start
-const testController = require('./controllers/test')
-app.use('/test', testController)
+const articlesController = require('./controllers/articles')
+app.use('/api/articles', articlesController)
 //controllers - end
 
 app.set('port', process.env.PORT || 4000)
