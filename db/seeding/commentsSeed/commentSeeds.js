@@ -1,5 +1,5 @@
-const Comment = require('../models/comment')
-const CommentData = require('./commentSeeds.json')
+const Comment = require('../../../models/comment')
+const CommentData = require('../../commentSeeds.json')
 
 Comment.deleteMany({})
   .then(() => {
