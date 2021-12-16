@@ -10,13 +10,11 @@ app.use(express.urlencoded({ extended: true }))
 //config - end
 
 //controllers - start
-<<<<<<< HEAD
 const articlesController = require('./controllers/articles')
 app.use('/api/articles', articlesController)
-=======
+
 const commentsController = require('./controllers/comments')
 app.use('/api/comments', commentsController)
->>>>>>> 06cac41 (added route)
 //controllers - end
 
 app.set('port', process.env.PORT || 4000)
