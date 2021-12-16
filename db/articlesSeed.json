@@ -1,0 +1,47 @@
+[
+  {
+    "author": "Filipe Marques",
+    "title": "Testing 123",
+    "body": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deleniti eum repellendus obcaecati rerum incidunt possimus consectetur quo illum voluptatibus voluptas doloremque odio exercitationem unde, sunt nesciunt quaerat laborum harum voluptatum veritatis reprehenderit quia cum corrupti. Quibusdam ipsam blanditiis doloremque ad excepturi voluptates, expedita fuga libero atque eum doloribus labore illum!",
+    "likes": {
+      "positive": 42,
+      "negative": 12
+    }
+  },
+  {
+    "author": "Rebecca Marques",
+    "title": "123 Testing",
+    "body": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam quasi accusamus consequatur recusandae, minima rem, debitis maxime repellendus porro autem corporis unde minus maiores sit! Ipsa reiciendis vitae quos non?",
+    "likes": {
+      "positive": 68,
+      "negative": 1
+    }
+  },
+  {
+    "author": "Yehuda",
+    "title": "How to make a killer form 123",
+    "body": "CSS... Just use Css",
+    "likes": {
+      "positive": 42222,
+      "negative": 123
+    }
+  },
+  {
+    "author": "Yusef",
+    "title": "How to Master Photoshop 101",
+    "body": "Use it a bunch of times",
+    "likes": {
+      "positive": 423131,
+      "negative": 121
+    }
+  },
+  {
+    "author": "Xuyen",
+    "title": "How to pronounce my name after I repeated it a bunch of times",
+    "body": "Just call me X...",
+    "likes": {
+      "positive": 10000000,
+      "negative": 0
+    }
+  }
+]
