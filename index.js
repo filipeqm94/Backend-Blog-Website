@@ -12,7 +12,10 @@ app.use(express.urlencoded({ extended: true }))
 //controllers - start
 const articlesController = require('./controllers/articles')
 app.use('/api/articles', articlesController)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 96e5a2c (test)
 const commentsController = require('./controllers/comments')
 app.use('/api/comments', commentsController)
 //controllers - end
