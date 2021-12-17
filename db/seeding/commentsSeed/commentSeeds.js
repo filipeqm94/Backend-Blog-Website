@@ -1,5 +1,5 @@
 const Comment = require('../../../models/comment')
-const CommentData = require('../../commentSeeds.json')
+const CommentData = require('./commentSeeds.json')
 
 Comment.deleteMany({})
   .then(() => {
@@ -7,6 +7,6 @@ Comment.deleteMany({})
   })
   .then(console.log)
   .catch(console.error)
-// .finally(() => {
-//   process.exit()
-// })
+  .finally(() => {
+    process.exit()
+  })
