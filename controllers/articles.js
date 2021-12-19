@@ -19,7 +19,7 @@ router.get('/article/:id', (req, res, next) => {
 })
 
 //POST routes
-router.post('/create', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const body = req.body
 
   Article.create(body)

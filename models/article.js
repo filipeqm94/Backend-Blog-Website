@@ -15,8 +15,14 @@ const ArticleSchema = new mongoose.Schema(
       required: true
     },
     likes: {
-      positive: Number,
-      negative: Number
+      positive: {
+        type: Number,
+        default: 0
+      },
+      negative: {
+        type: Number,
+        default: 0
+      }
     }
   },
   { timestamps: true }
