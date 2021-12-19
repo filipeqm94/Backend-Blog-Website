@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
     .catch(next)
 })
 
-router.get('/article/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findById({ _id: id })
@@ -28,7 +28,7 @@ router.post('/', (req, res, next) => {
 })
 
 //UPDATE routes
-router.patch('/edit/:id', (req, res, next) => {
+router.patch('/:id', (req, res, next) => {
   const id = req.params.id
   const body = req.body
 
@@ -38,7 +38,7 @@ router.patch('/edit/:id', (req, res, next) => {
 })
 
 //DELETE route
-router.delete('/delete/:id', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findByIdAndDelete({ _id: id })
