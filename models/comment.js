@@ -2,26 +2,18 @@ const mongoose = require('../db/connection')
 
 const CommentSchema = new mongoose.Schema(
   {
-    postId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Article'
-    },
-    author: {
-      type: String,
-      default: 'Anonymous'
-    },
     body: {
       type: String,
       required: true
     },
-    likes: {
-      positive: Number,
-      negative: Number
+    likeCount: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }
 )
 
-const Comment = mongoose.model('gaphhy', CommentSchema)
+const Comment = mongoose.model('Comment', CommentSchema)
 
 module.exports = Comment
