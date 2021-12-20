@@ -11,7 +11,7 @@ CommentsRouter.get('/', (req, res, next) => {
 
 CommentsRouter.post('/', (req, res, next) => {
   Comments.create(req.body)
-    .then(() => res.redirect(303, '/'))
+    .then(data => res.json(data))
     .catch(next)
 })
 

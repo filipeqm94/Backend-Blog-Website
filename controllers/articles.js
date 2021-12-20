@@ -14,6 +14,7 @@ router.get('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findById({ _id: id })
+    .populate('comments')
     .then(article => res.json(article))
     .catch(next)
 })
@@ -35,6 +36,23 @@ router.patch('/:id', (req, res, next) => {
   Article.findByIdAndUpdate({ _id: id }, body, { new: true })
     .then(article => res.json(article))
     .catch(next)
+})
+
+router.patch('/:id/comments', (req, res, next) => {
+  const id = req.params.id
+  const body = req.body
+
+  Article.findByIdAndUpdate(
+    { _id: id },
+    { $push: { comments: body._id } },
+    { new: true }
+  )
+    .populate('comments')
+    .then(data =>
+      res.json(
+        ...data.comments.filter(comment => body._id === comment._id.toString())
+      )
+    )
 })
 
 //DELETE route
