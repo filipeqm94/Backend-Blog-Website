@@ -60,7 +60,7 @@ router.delete('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findByIdAndDelete({ _id: id })
-    .then(() => res.redirect(303, '/'))
+    .then(data => res.json(data))
     .catch(next)
 })
 
