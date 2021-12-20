@@ -14,16 +14,21 @@ const ArticleSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    likes: {
-      positive: {
-        type: Number,
-        default: 0
-      },
-      negative: {
-        type: Number,
-        default: 0
+    likeCount: {
+      type: Number,
+      default: 0
+    },
+    comments: [
+      {
+        commentId: mongoose.Schema.Types.ObjectId,
+        author: String,
+        body: String,
+        likeCount: {
+          type: Number,
+          default: 0
+        }
       }
-    }
+    ]
   },
   { timestamps: true }
 )
