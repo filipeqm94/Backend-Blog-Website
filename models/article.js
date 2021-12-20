@@ -20,13 +20,8 @@ const ArticleSchema = new mongoose.Schema(
     },
     comments: [
       {
-        commentId: mongoose.Schema.Types.ObjectId,
-        author: String,
-        body: String,
-        likeCount: {
-          type: Number,
-          default: 0
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
       }
     ]
   },
