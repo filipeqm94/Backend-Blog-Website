@@ -6,7 +6,7 @@ const router = express.Router()
 //GET routes
 router.get('/', (req, res, next) => {
   Article.find({})
-    .then(articles => res.json(articles))
+    .then(articles => res.json(articles.reverse()))
     .catch(next)
 })
 
