@@ -6,20 +6,21 @@ const router = express.Router()
 //GET routes
 router.get('/', (req, res, next) => {
   Article.find({})
-    .then(articles => res.json(articles))
+    .then(articles => res.json(articles.reverse()))
     .catch(next)
 })
 
-router.get('/article/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findById({ _id: id })
+    .populate('comments')
     .then(article => res.json(article))
     .catch(next)
 })
 
 //POST routes
-router.post('/create', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const body = req.body
 
   Article.create(body)
@@ -28,7 +29,7 @@ router.post('/create', (req, res, next) => {
 })
 
 //UPDATE routes
-router.patch('/edit/:id', (req, res, next) => {
+router.patch('/:id', (req, res, next) => {
   const id = req.params.id
   const body = req.body
 
@@ -37,12 +38,29 @@ router.patch('/edit/:id', (req, res, next) => {
     .catch(next)
 })
 
+router.patch('/:id/comments', (req, res, next) => {
+  const id = req.params.id
+  const body = req.body
+
+  Article.findByIdAndUpdate(
+    { _id: id },
+    { $push: { comments: body._id } },
+    { new: true }
+  )
+    .populate('comments')
+    .then(data =>
+      res.json(
+        ...data.comments.filter(comment => body._id === comment._id.toString())
+      )
+    )
+})
+
 //DELETE route
-router.delete('/delete/:id', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
   const id = req.params.id
 
   Article.findByIdAndDelete({ _id: id })
-    .then(() => res.redirect(303, '/'))
+    .then(data => res.json(data))
     .catch(next)
 })
 

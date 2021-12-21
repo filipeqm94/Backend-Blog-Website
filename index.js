@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true }))
 //controllers - start
 const articlesController = require('./controllers/articles')
 app.use('/api/articles', articlesController)
-
 const commentsController = require('./controllers/comments')
 app.use('/api/comments', commentsController)
 //controllers - end
