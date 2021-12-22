@@ -9,6 +9,12 @@ CommentsRouter.get('/', (req, res, next) => {
     .catch(next)
 })
 
+CommentsRouter.get('/:id', (req, res, next) => {
+  Comments.findById({ _id: req.params.id })
+    .then(comment => res.json(comment))
+    .catch(next)
+})
+
 CommentsRouter.post('/', (req, res, next) => {
   Comments.create(req.body)
     .then(data => res.json(data))
