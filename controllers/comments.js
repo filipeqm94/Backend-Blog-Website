@@ -15,15 +15,15 @@ CommentsRouter.post('/', (req, res, next) => {
     .catch(next)
 })
 
-CommentsRouter.put('/:id', (req, res, next) => {
+CommentsRouter.patch('/:id', (req, res, next) => {
   Comments.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
-    .then(comments => res.json(comments))
+    .then(comment => res.json(comment))
     .catch(next)
 })
 
 CommentsRouter.delete('/:id', (req, res, next) => {
   Comments.findOneAndDelete({ _id: req.params.id })
-    .then(() => res.redirect(303, '/'))
+    .then(comment => res.json(comment))
     .catch(next)
 })
 
