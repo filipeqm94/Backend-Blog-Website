@@ -1,4 +1,5 @@
 const express = require('express')
+const Article = require('../models/article')
 const Comments = require('../models/comment')
 
 const CommentsRouter = express.Router()
@@ -16,9 +17,16 @@ CommentsRouter.get('/:id', (req, res, next) => {
 })
 
 CommentsRouter.post('/', (req, res, next) => {
-  Comments.create(req.body)
-    .then(data => res.json(data))
-    .catch(next)
+  const { comment, articleId } = req.body
+  Comments.create(comment).then(comment => {
+    Article.findByIdAndUpdate(
+      articleId,
+      { $push: { comments: comment._id } },
+      { new: true }
+    )
+      .populate('comments')
+      .then(data => res.json(data))
+  })
 })
 
 CommentsRouter.patch('/:id', (req, res, next) => {
