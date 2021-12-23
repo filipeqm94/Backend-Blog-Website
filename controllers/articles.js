@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const Article = require('../models/article')
 
 const router = express.Router()
@@ -12,9 +11,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:id', (req, res, next) => {
-  const id = req.params.id
-
-  Article.findById({ _id: id })
+  Article.findById(req.params.id)
     .populate('comments')
     .then(article => res.json(article))
     .catch(next)
@@ -22,9 +19,7 @@ router.get('/:id', (req, res, next) => {
 
 //POST routes
 router.post('/', (req, res, next) => {
-  const body = req.body
-
-  Article.create(body)
+  Article.create(req.body)
     .then(article => res.json(article))
     .catch(next)
 })
@@ -32,16 +27,31 @@ router.post('/', (req, res, next) => {
 /*----------UPDATE routes----------*/
 //edit article
 router.patch('/:id', (req, res, next) => {
-  const id = req.params.id
-  const body = req.body
-
-  Article.findByIdAndUpdate({ _id: id }, body, { new: true })
+  Article.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(article => res.json(article))
     .catch(next)
 })
 
+//add comment
+router.patch('/:id/comments', (req, res, next) => {
+  Article.findByIdAndUpdate(
+    req.params.id,
+    { $push: { comments: req.body.id } },
+    { new: true }
+  )
+    .populate('comments')
+    .then(data =>
+      res.json(
+        ...data.comments.filter(
+          comment => req.body._id === comment._id.toString()
+        )
+      )
+    )
+    .catch(next)
+})
+
 //like/dislike article
-router.patch('/:id/:action', async (req, res, next) => {
+router.patch('/:id/:action', (req, res, next) => {
   const id = req.params.id
   const action = req.params.action === 'like' ? 1 : -1
 
@@ -55,23 +65,6 @@ router.patch('/:id/:action', async (req, res, next) => {
     )
     .then(article => res.json(article))
     .catch(next)
-})
-
-router.patch('/:id/comments', (req, res, next) => {
-  const id = req.params.id
-  const body = req.body
-
-  Article.findByIdAndUpdate(
-    { _id: id },
-    { $push: { comments: body._id } },
-    { new: true }
-  )
-    .populate('comments')
-    .then(data =>
-      res.json(
-        ...data.comments.filter(comment => body._id === comment._id.toString())
-      )
-    )
 })
 
 //DELETE route
