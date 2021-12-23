@@ -37,14 +37,8 @@ router.patch('/:id/:action', (req, res, next) => {
   const id = req.params.id
   const action = req.params.action === 'like' ? 1 : -1
 
-  Article.findById(id)
-    .then(article =>
-      Article.findByIdAndUpdate(
-        id,
-        { likeCount: article.likeCount + action },
-        { new: true }
-      ).populate('comments')
-    )
+  Article.findByIdAndUpdate(id, { $inc: { likeCount: action } }, { new: true })
+    .populate('comments')
     .then(article => res.json(article))
     .catch(next)
 })
