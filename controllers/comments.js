@@ -1,4 +1,5 @@
 const express = require('express')
+const Article = require('../models/article')
 const Comments = require('../models/comment')
 
 const CommentsRouter = express.Router()
@@ -9,21 +10,34 @@ CommentsRouter.get('/', (req, res, next) => {
     .catch(next)
 })
 
-CommentsRouter.post('/', (req, res, next) => {
-  Comments.create(req.body)
-    .then(data => res.json(data))
+CommentsRouter.get('/:id', (req, res, next) => {
+  Comments.findById({ _id: req.params.id })
+    .then(comment => res.json(comment))
     .catch(next)
 })
 
-CommentsRouter.put('/:id', (req, res, next) => {
+CommentsRouter.post('/', (req, res, next) => {
+  const { comment, articleId } = req.body
+  Comments.create(comment).then(comment => {
+    Article.findByIdAndUpdate(
+      articleId,
+      { $push: { comments: comment._id } },
+      { new: true }
+    )
+      .populate('comments')
+      .then(data => res.json(data))
+  })
+})
+
+CommentsRouter.patch('/:id', (req, res, next) => {
   Comments.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
-    .then(comments => res.json(comments))
+    .then(comment => res.json(comment))
     .catch(next)
 })
 
 CommentsRouter.delete('/:id', (req, res, next) => {
   Comments.findOneAndDelete({ _id: req.params.id })
-    .then(() => res.redirect(303, '/'))
+    .then(comment => res.json(comment))
     .catch(next)
 })
 

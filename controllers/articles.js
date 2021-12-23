@@ -11,9 +11,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/:id', (req, res, next) => {
-  const id = req.params.id
-
-  Article.findById({ _id: id })
+  Article.findById(req.params.id)
     .populate('comments')
     .then(article => res.json(article))
     .catch(next)
@@ -21,38 +19,34 @@ router.get('/:id', (req, res, next) => {
 
 //POST routes
 router.post('/', (req, res, next) => {
-  const body = req.body
-
-  Article.create(body)
+  Article.create(req.body)
     .then(article => res.json(article))
     .catch(next)
 })
 
-//UPDATE routes
+/*----------UPDATE routes----------*/
+//edit article
 router.patch('/:id', (req, res, next) => {
-  const id = req.params.id
-  const body = req.body
-
-  Article.findByIdAndUpdate({ _id: id }, body, { new: true })
+  Article.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(article => res.json(article))
     .catch(next)
 })
 
-router.patch('/:id/comments', (req, res, next) => {
+//like/dislike article
+router.patch('/:id/:action', (req, res, next) => {
   const id = req.params.id
-  const body = req.body
+  const action = req.params.action === 'like' ? 1 : -1
 
-  Article.findByIdAndUpdate(
-    { _id: id },
-    { $push: { comments: body._id } },
-    { new: true }
-  )
-    .populate('comments')
-    .then(data =>
-      res.json(
-        ...data.comments.filter(comment => body._id === comment._id.toString())
-      )
+  Article.findById(id)
+    .then(article =>
+      Article.findByIdAndUpdate(
+        id,
+        { likeCount: article.likeCount + action },
+        { new: true }
+      ).populate('comments')
     )
+    .then(article => res.json(article))
+    .catch(next)
 })
 
 //DELETE route
