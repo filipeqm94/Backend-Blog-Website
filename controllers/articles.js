@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const Article = require('../models/article')
 
 const router = express.Router()
@@ -28,12 +29,30 @@ router.post('/', (req, res, next) => {
     .catch(next)
 })
 
-//UPDATE routes
+/*----------UPDATE routes----------*/
+//edit article
 router.patch('/:id', (req, res, next) => {
   const id = req.params.id
   const body = req.body
 
   Article.findByIdAndUpdate({ _id: id }, body, { new: true })
+    .then(article => res.json(article))
+    .catch(next)
+})
+
+//like/dislike article
+router.patch('/:id/:action', async (req, res, next) => {
+  const id = req.params.id
+  const action = req.params.action === 'like' ? 1 : -1
+
+  Article.findById(id)
+    .then(article =>
+      Article.findByIdAndUpdate(
+        id,
+        { likeCount: article.likeCount + action },
+        { new: true }
+      )
+    )
     .then(article => res.json(article))
     .catch(next)
 })
