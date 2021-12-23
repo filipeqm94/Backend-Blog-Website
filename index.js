@@ -16,6 +16,14 @@ const commentsController = require('./controllers/comments')
 app.use('/api/comments', commentsController)
 //controllers - end
 
+//error handling
+app.use((err, req, res, next) => {
+  const statusCode = res.status || 500
+  const errorMessage = err.message || 'Internal server error'
+
+  res.status(statusCode).send(errorMessage)
+})
+
 app.set('port', process.env.PORT || 4000)
 
 app.listen(app.get('port'), () => {
