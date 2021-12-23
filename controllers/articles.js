@@ -32,24 +32,6 @@ router.patch('/:id', (req, res, next) => {
     .catch(next)
 })
 
-//add comment
-router.patch('/:id/comments', (req, res, next) => {
-  Article.findByIdAndUpdate(
-    req.params.id,
-    { $push: { comments: req.body.id } },
-    { new: true }
-  )
-    .populate('comments')
-    .then(data =>
-      res.json(
-        ...data.comments.filter(
-          comment => req.body._id === comment._id.toString()
-        )
-      )
-    )
-    .catch(next)
-})
-
 //like/dislike article
 router.patch('/:id/:action', (req, res, next) => {
   const id = req.params.id
@@ -61,7 +43,7 @@ router.patch('/:id/:action', (req, res, next) => {
         id,
         { likeCount: article.likeCount + action },
         { new: true }
-      )
+      ).populate('comments')
     )
     .then(article => res.json(article))
     .catch(next)
