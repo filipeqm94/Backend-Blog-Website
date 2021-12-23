@@ -43,7 +43,7 @@ router.patch('/:id/:action', (req, res, next) => {
         id,
         { likeCount: article.likeCount + action },
         { new: true }
-      )
+      ).populate('comments')
     )
     .then(article => res.json(article))
     .catch(next)
