@@ -18,7 +18,14 @@ router.post('/signin', (req, res, next) => {
         expiresIn: '1h'
       })
 
-      res.status(200).json({ profileObj: user, token })
+      res.status(200).json({
+        profileObj: {
+          name: user.name,
+          email: user.email,
+          _id: user._id
+        },
+        token
+      })
     })
     .catch(next)
 })
@@ -45,7 +52,14 @@ router.post('/signup', async (req, res, next) => {
               { expiresIn: '1h' }
             )
 
-            return res.json({ profileObj: user, token })
+            res.json({
+              profileObj: {
+                name: user.name,
+                email: user.email,
+                _id: user._id
+              },
+              token
+            })
           })
     })
     .catch(console.error)
