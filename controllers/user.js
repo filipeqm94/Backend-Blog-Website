@@ -9,27 +9,30 @@ const router = express.Router()
 router.post('/signin', (req, res, next) => {
   const { email, password } = req.body
 
-  User.findOne({ email: email }).then(async user => {
-    if (!user) return res.json({ message: 'Invalid credentials.' })
+  User.findOne({ email: email })
+    .then(async user => {
+      if (!user)
+        return res.status(400).json({ message: 'Invalid credentials.' })
 
-    const passwordCompare = await bcrypt.compare(password, user.password)
+      const passwordCompare = await bcrypt.compare(password, user.password)
 
-    if (!passwordCompare) return res.json({ message: 'Invalid credentials.' })
+      if (!passwordCompare)
+        return res.status(400).json({ message: 'Invalid credentials.' })
 
-    const tokenId = jwt.sign({ email: user.email, id: user._id }, 'test', {
-      expiresIn: '1h'
+      const tokenId = jwt.sign({ email: user.email, id: user._id }, 'test', {
+        expiresIn: '1h'
+      })
+
+      res.json({
+        profileObj: {
+          name: user.name,
+          email: user.email,
+          _id: user._id
+        },
+        tokenId
+      })
     })
-
-    res.json({
-      profileObj: {
-        name: user.name,
-        email: user.email,
-        _id: user._id
-      },
-      tokenId
-    })
-  })
-  // .catch(next)
+    .catch(next)
 })
 
 router.post('/signup', async (req, res, next) => {
@@ -64,7 +67,7 @@ router.post('/signup', async (req, res, next) => {
             })
           })
     })
-    .catch(console.error)
+    .catch(next)
 })
 
 module.exports = router
