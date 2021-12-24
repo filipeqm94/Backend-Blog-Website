@@ -9,25 +9,27 @@ const router = express.Router()
 router.post('/signin', (req, res, next) => {
   const { email, password } = req.body
 
-  User.findOne({ email: email })
-    .then(user => {
-      if (!bcrypt.compare(password, user.password))
-        return res.status(400).json({ message: 'Invalid credentials' })
+  User.findOne({ email: email }).then(async user => {
+    if (!user) return res.json({ message: 'Invalid credentials.' })
 
-      const token = jwt.sign({ email: user.email, id: user._id }, 'test', {
-        expiresIn: '1h'
-      })
+    const passwordCompare = await bcrypt.compare(password, user.password)
 
-      res.status(200).json({
-        profileObj: {
-          name: user.name,
-          email: user.email,
-          _id: user._id
-        },
-        token
-      })
+    if (!passwordCompare) return res.json({ message: 'Invalid credentials.' })
+
+    const tokenId = jwt.sign({ email: user.email, id: user._id }, 'test', {
+      expiresIn: '1h'
     })
-    .catch(next)
+
+    res.json({
+      profileObj: {
+        name: user.name,
+        email: user.email,
+        _id: user._id
+      },
+      tokenId
+    })
+  })
+  // .catch(next)
 })
 
 router.post('/signup', async (req, res, next) => {
@@ -46,7 +48,7 @@ router.post('/signup', async (req, res, next) => {
             email: email,
             password: hashedPassword
           }).then(user => {
-            const token = jwt.sign(
+            const tokenId = jwt.sign(
               { email: user.email, id: user._id },
               'test',
               { expiresIn: '1h' }
@@ -58,7 +60,7 @@ router.post('/signup', async (req, res, next) => {
                 email: user.email,
                 _id: user._id
               },
-              token
+              tokenId
             })
           })
     })
