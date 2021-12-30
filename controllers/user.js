@@ -19,17 +19,15 @@ router.post('/signin', (req, res, next) => {
       if (!passwordCompare)
         return res.status(400).json({ message: 'Invalid credentials.' })
 
-      const tokenId = jwt.sign({ email: user.email, id: user._id }, 'test', {
+      const token = jwt.sign({ email: user.email, id: user._id }, 'test', {
         expiresIn: '1h'
       })
 
       res.json({
-        profileObj: {
-          name: user.name,
-          email: user.email,
-          _id: user._id
-        },
-        tokenId
+        name: user.name,
+        email: user.email,
+        _id: user._id,
+        token
       })
     })
     .catch(next)
@@ -51,19 +49,17 @@ router.post('/signup', async (req, res, next) => {
             email: email,
             password: hashedPassword
           }).then(user => {
-            const tokenId = jwt.sign(
+            const token = jwt.sign(
               { email: user.email, id: user._id },
               'test',
               { expiresIn: '1h' }
             )
 
             res.json({
-              profileObj: {
-                name: user.name,
-                email: user.email,
-                _id: user._id
-              },
-              tokenId
+              name: user.name,
+              email: user.email,
+              _id: user._id,
+              token
             })
           })
     })
