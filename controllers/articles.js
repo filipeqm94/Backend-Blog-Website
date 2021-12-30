@@ -1,5 +1,6 @@
 const express = require('express')
 const Article = require('../models/article')
+const auth = require('../middleware/auth')
 
 const router = express.Router()
 
@@ -18,7 +19,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 //POST routes
-router.post('/', (req, res, next) => {
+router.post('/', auth, (req, res, next) => {
   Article.create(req.body)
     .then(article => res.json(article))
     .catch(next)
@@ -26,14 +27,17 @@ router.post('/', (req, res, next) => {
 
 /*----------UPDATE routes----------*/
 //edit article
-router.patch('/:id', (req, res, next) => {
+router.patch('/:id', auth, (req, res, next) => {
   Article.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(article => res.json(article))
     .catch(next)
 })
 
 //like/dislike article
-router.patch('/:id/:action', (req, res, next) => {
+router.patch('/:id/:action', auth, (req, res, next) => {
+  if (!req.userId)
+    return res.json({ message: 'Must be logged in to perform action.' })
+
   const id = req.params.id
   const action = req.params.action === 'like' ? 1 : -1
 
@@ -44,7 +48,7 @@ router.patch('/:id/:action', (req, res, next) => {
 })
 
 //DELETE route
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', auth, (req, res, next) => {
   const id = req.params.id
 
   Article.findByIdAndDelete({ _id: id })

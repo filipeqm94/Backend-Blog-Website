@@ -14,6 +14,8 @@ const articlesController = require('./controllers/articles')
 app.use('/api/articles', articlesController)
 const commentsController = require('./controllers/comments')
 app.use('/api/comments', commentsController)
+const userController = require('./controllers/user')
+app.use('/api/user', userController)
 //controllers - end
 
 //error handling
@@ -21,7 +23,7 @@ app.use((err, req, res, next) => {
   const statusCode = res.status || 500
   const errorMessage = err.message || 'Internal server error'
 
-  res.status(statusCode).send(errorMessage)
+  return res.status(statusCode).json({ message: errorMessage })
 })
 
 app.set('port', process.env.PORT || 4000)
