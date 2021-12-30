@@ -13,15 +13,17 @@ CommentsRouter.get('/', (req, res, next) => {
 
 CommentsRouter.post('/', auth, (req, res, next) => {
   const { comment, articleId } = req.body
-  Comments.create(comment).then(comment => {
-    Article.findByIdAndUpdate(
-      articleId,
-      { $push: { comments: comment._id } },
-      { new: true }
-    )
-      .populate('comments')
-      .then(data => res.json(data))
-  })
+  Comments.create(comment)
+    .then(comment => {
+      Article.findByIdAndUpdate(
+        articleId,
+        { $push: { comments: comment._id } },
+        { new: true }
+      )
+        .populate('comments')
+        .then(data => res.json(data))
+    })
+    .catch(next)
 })
 
 CommentsRouter.patch('/:id', auth, (req, res, next) => {
